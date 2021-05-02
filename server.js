@@ -31,15 +31,17 @@ app.use(fileUpload())
 app.get('/', Middleware.Authentication.auth, Middleware.Authorization.admin, Controller.Dashboard.dashboard) //done
 app.get('/login', Controller.Auth.loginPage) //done
 app.post('/login', Controller.Auth.login) //done
+app.get('/employees', Controller.Employee.employees) //done
 app.get('/employee/add', Controller.Employee.addEmployeePage) //done
 app.post('/employee/add', Controller.Employee.addEmployee) //done
-app.get('/employees', Controller.Employee.employees)
+app.get('/employee/delete/:id', Controller.Employee.deleteEmployee) //delete
+app.get('/employee/loan/:id', Controller.Employee.loanPage) //done
+app.post('/employee/loan/:id', Controller.Employee.loan) //done
+app.get('/employee/update/:id', Controller.Employee.updatePage) //done
+app.post('/employee/update/:id', Controller.Employee.update) //done
 app.get('/barcode', Controller.Attendance.barcodePage)
 app.post('/barcode', Controller.Attendance.barcode)
 app.get('/employee/:id', Controller.Attendance.barcode)
-app.get('/employee/update/:id', Controller.Attendance.barcode)
-app.post('/employee/update/:id', Controller.Attendance.barcode)
-app.post('/employee/delete/:id', Controller.Attendance.barcode)
 app.get('/report/:id/:year/:month', Controller.Attendance.barcode)
 // app.get('/signup', Controller.Auth.signupPage)
 // app.post('/signup', Controller.Auth.signup)

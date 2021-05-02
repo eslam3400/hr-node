@@ -6,3 +6,6 @@
 .main-panel > .content {
   margin-top: 0;
 }
+#employees-table ul {
+  list-style: none;
+}

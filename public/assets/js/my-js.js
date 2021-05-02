@@ -167,3 +167,21 @@ $(document).ready(function () {
     });
   });
 });
+
+$('#pranch-employees').change(() => {
+  let table = document.getElementById("employees-table");
+  let tr = table.getElementsByTagName("tr");
+  if ($('#pranch-employees').val() == "all")
+    for (let i = 0; i < tr.length; i++) tr[i].style.display = "";
+  else
+    for (let i = 0; i < tr.length; i++) {
+      let td = tr[i].getElementsByTagName("td")[2];
+      if (td) {
+        if ($('#pranch-employees').val() == td.innerText || $('#pranch-employees').val() == td.textContent) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+})

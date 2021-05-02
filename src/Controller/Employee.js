@@ -1,6 +1,7 @@
 const Model = require('../Model/Model')
 let { uploadPath } = require('../../uploadPath')
 const { v4: uuidv4 } = require('uuid');
+const { getDate } = require('./Attendance')
 
 let checkIfFieldUnique = (callBack = (unique) => { }, field = { name: null, value: null }) => new Model('users').get(data => {
   let unique = true
@@ -57,10 +58,51 @@ let employees = (req, res) => {
   }, { where: `role <> 'admin'` })
 }
 
+let deleteEmployee = (req, res) => new Model("users").delete(`id = ${req.params.id}`, () => res.redirect('/employees'))
+
+let loanPage = (req, res) => {
+  new Model("users").get(users => {
+    res.render('add-loan', { tab: "Employees", user: users[0] })
+  }, { where: `id = ${req.params.id}` })
+}
+
+let loan = (req, res) => {
+  let loanData = req.body
+  loanData.employee_id = req.params.id
+  loanData.date = getDate('today')
+  new Model("loan").add(loanData, () => res.redirect('/employees'))
+}
+
+let updatePage = (req, res) => {
+  new Model("users").get(users => {
+    new Model("pranchs").get(pranchs => {
+      new Model("jobs").get(jobs => {
+        res.render('update-employee', { tab: "Employees", user: users[0], pranchs, jobs })
+      }, {})
+    }, {})
+  }, {
+    where: `id = ${req.params.id}`
+  })
+}
+
+let update = (req, res) => new Model("users").update(req.body, `id = ${req.params.id}`, () => res.redirect('/employees'))
+
 let employee = (req, res) => new Model("users").get(data => res.render('employee', { employee: data[0] }), { where: `id = ${req.params.id}` })
 
 let report = (req, res) => new Model("att").get(data => res.render('employe-report', { data }), { where: `id = ${req.params.id} AND day LIKE '${req.params.year}-${req.params.month}%'` })
 
 let updateEmployeeData = (req, res) => new Model("users").update(req.body, `id = ${req.params.id}`)
 
-module.exports = { addEmployeePage, addEmployee, employee, employees, report, updateEmployeeData }
+module.exports = {
+  addEmployeePage,
+  addEmployee,
+  employee,
+  employees,
+  report,
+  updateEmployeeData,
+  deleteEmployee,
+  loanPage,
+  loan,
+  updatePage,
+  update
+}

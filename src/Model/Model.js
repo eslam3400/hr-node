@@ -79,7 +79,7 @@ class Model {
     });
   }
 
-  add(data) {
+  add(data, callBack = () => { }) {
     let cols = []
     let values = []
     for (const key in data) {
@@ -90,21 +90,23 @@ class Model {
       if (connectionErr) throw connectionErr;
       this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
         if (queryErr) throw queryErr;
+        callBack()
         // console.log(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
       });
     });
   }
 
-  delete(where) {
+  delete(where, callBack = () => { }) {
     this.connection.connect(connectionErr => {
       if (connectionErr) throw connectionErr;
-      this.connection.query(`DELETE FROM ${this.tabelName} ${where}`, (queryErr) => {
+      this.connection.query(`DELETE FROM ${this.tabelName} WHERE ${where}`, (queryErr) => {
         if (queryErr) throw queryErr;
+        callBack()
       });
     });
   }
 
-  update(data, where) {
+  update(data, where, callBack = () => { }) {
     let cols = []
     let values = []
     for (const key in data) {
@@ -126,7 +128,7 @@ class Model {
       sql += ` WHERE ${where}`
       this.connection.query(sql, (queryErr) => {
         if (queryErr) throw queryErr;
-        console.log(sql)
+        callBack()
       });
     });
   }

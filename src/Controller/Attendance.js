@@ -112,4 +112,4 @@ let timeInNumberFormat = (timeStamp) => {
 
 let calculateWorkedTime = (start, end) => Math.abs(start - timeInNumberFormat(end))
 
-module.exports = { barcode, barcodePage }
+module.exports = { barcode, barcodePage, getDate }
