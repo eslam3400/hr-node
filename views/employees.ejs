@@ -1,0 +1,49 @@
+<%- include('includes/navbar') %>
+<div class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header card-header-primary">
+            <h4 class="card-title">Employees</h4>
+            <p class="card-category">
+              Here is all the employees in your system
+            </p>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class="text-primary">
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Pranch</th>
+                  <th>Job</th>
+                  <th>Salary</th>
+                  <th>Operations</th>
+                </thead>
+                <tbody>
+                  <% employees.forEach(employee => { %>
+                  <tr>
+                    <td><%= employee.id %></td>
+                    <td><%= employee.firstName + ' ' + employee.lastName %></td>
+                    <% pranchs.forEach(pranch => { %> <% if (pranch.id ==
+                    employee.pranch_id) { %>
+                    <td><%= pranch.name %></td>
+                    <% } %> <% }) %> <% jobs.forEach(job => { %> <% if (job.id
+                    == employee.job_id) { %>
+                    <td><%= job.name %></td>
+                    <% } %> <% }) %>
+                    <td class="text-primary"><%= employee.salary %></td>
+                    <td>Operations</td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include("includes/footer") %>

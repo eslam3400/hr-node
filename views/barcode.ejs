@@ -1,0 +1,34 @@
+<%- include("includes/start") %>
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <span class="navbar-brand m-auto h1">DevTik HR</span>
+  </div>
+</nav>
+<section class="mt-5 pt-5">
+  <form action="/barcode" method="POST" class="m-auto w-25 pt-5">
+    <% if (message == "loginError") { %>
+    <div class="alert alert-danger" role="alert">
+      Email Or Password Are Inccorect Please Try Again With Valid Data
+    </div>
+    <% } %> <% if (message == "authError") { %>
+    <div class="alert alert-danger" role="alert">
+      You Have To Login First To Access This Page
+    </div>
+    <% } %> <% if (message == "accessError") { %>
+    <div class="alert alert-danger" role="alert">
+      You Don't Have The Permission To Access This Page
+    </div>
+    <% } %>
+    <div class="mt-5">
+      <label for="exampleInputEmail1" class="form-label">barcode</label>
+      <input
+        class="w-100"
+        type="number"
+        id="barcode"
+        name="barcode"
+        autofocus
+      />
+    </div>
+  </form>
+</section>
+<script></script>
