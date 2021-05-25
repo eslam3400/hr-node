@@ -29,7 +29,7 @@ let uploadFile = (req, res, callBack = () => { }) => {
 let addEmployeePage = (req, res) => {
   new Model('pranchs').get(pranchs => {
     new Model('jobs').get(jobs =>
-      res.render('add-employee', { tab: "Add Employee", pranchs, jobs })
+      res.render('admin/add-employee', { tab: "Add Employee", pranchs, jobs })
       , {})
   }, {})
 }
@@ -53,7 +53,7 @@ let addEmployee = (req, res) => {
 let employees = (req, res) => {
   new Model("users").get(data => {
     new Model('pranchs').get(pranchs => {
-      new Model('jobs').get(jobs => res.render('employees', { tab: "Employees", employees: data, pranchs, jobs }), {})
+      new Model('jobs').get(jobs => res.render('admin/employees', { tab: "Employees", employees: data, pranchs, jobs }), {})
     }, {})
   }, { where: `role <> 'admin'` })
 }
@@ -62,7 +62,7 @@ let deleteEmployee = (req, res) => new Model("users").delete(`id = ${req.params.
 
 let loanPage = (req, res) => {
   new Model("users").get(users => {
-    res.render('add-loan', { tab: "Employees", user: users[0] })
+    res.render('admin/add-loan', { tab: "Employees", user: users[0] })
   }, { where: `id = ${req.params.id}` })
 }
 
@@ -77,7 +77,7 @@ let updatePage = (req, res) => {
   new Model("users").get(users => {
     new Model("pranchs").get(pranchs => {
       new Model("jobs").get(jobs => {
-        res.render('update-employee', { tab: "Employees", user: users[0], pranchs, jobs })
+        res.render('admin/update-employee', { tab: "Employees", user: users[0], pranchs, jobs })
       }, {})
     }, {})
   }, {

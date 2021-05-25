@@ -1,5 +1,5 @@
 let dashboard = (req, res) => {
-  res.render('dashboard', { tab: "Dashboard" })
+  res.render('admin/dashboard')
 }
 
 module.exports = { dashboard }

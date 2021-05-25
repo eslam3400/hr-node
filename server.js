@@ -28,7 +28,7 @@ app.use(cookie("DevTik"))
  */
 app.use(fileUpload())
 
-app.get('/', Middleware.Authentication.auth, Middleware.Authorization.admin, Controller.Dashboard.dashboard) //done
+app.get('/', Controller.Dashboard.dashboard) //done
 app.get('/login', Controller.Auth.loginPage) //done
 app.post('/login', Controller.Auth.login) //done
 app.get('/employees', Controller.Employee.employees) //done
@@ -43,7 +43,6 @@ app.get('/barcode', Controller.Attendance.barcodePage)
 app.post('/barcode', Controller.Attendance.barcode)
 app.get('/employee/:id', Controller.Attendance.barcode)
 app.get('/report/:id/:year/:month', Controller.Attendance.barcode)
-// app.get('/signup', Controller.Auth.signupPage)
-// app.post('/signup', Controller.Auth.signup)
+app.get('*', (req, res) => res.send("404"))
 
 app.listen(process.env.PORT || port, () => console.log(`app listening at http://localhost:${port}`))

@@ -60,6 +60,7 @@ class Model {
       if (connectionErr) throw connectionErr;
       this.connection.query(sqlStatment, (queryErr, result) => {
         if (queryErr) throw queryErr;
+        this.connection.destroy()
         callBack(result)
       });
     });
@@ -74,6 +75,7 @@ class Model {
       if (connectionErr) throw connectionErr;
       this.connection.query(SQLQuery, (queryErr, result) => {
         if (queryErr) throw queryErr;
+        this.connection.destroy()
         callBack(result)
       });
     });
@@ -90,6 +92,7 @@ class Model {
       if (connectionErr) throw connectionErr;
       this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
         if (queryErr) throw queryErr;
+        this.connection.destroy()
         callBack()
         // console.log(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
       });
@@ -101,6 +104,7 @@ class Model {
       if (connectionErr) throw connectionErr;
       this.connection.query(`DELETE FROM ${this.tabelName} WHERE ${where}`, (queryErr) => {
         if (queryErr) throw queryErr;
+        this.connection.destroy()
         callBack()
       });
     });
@@ -128,6 +132,7 @@ class Model {
       sql += ` WHERE ${where}`
       this.connection.query(sql, (queryErr) => {
         if (queryErr) throw queryErr;
+        this.connection.destroy()
         callBack()
       });
     });
