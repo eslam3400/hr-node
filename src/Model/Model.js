@@ -10,11 +10,9 @@ class Model {
    */
   connection = null;
   /**
-   * define the table name in the creation of the object and make a connection to the database
-   * and save it to a connection variable to communicate with the database
+   * make a connection to the database and save it to a connection variable to communicate with the database
   */
-  constructor(tabelName) {
-    this.tabelName = tabelName;
+  connect() {
     this.connection = db.createConnection({
       host: 'localhost',
       user: 'root',
@@ -23,18 +21,21 @@ class Model {
     })
   }
   /**
+   * make a disconnection with the database
+   */
+  disconnect() {
+    this.connection.destroy()
+  }
+  /**
    * this function get data from initalized table name provided depending on passed options
    * 
-   * @param {*} callBack take a function definetion to be excuted at the time the sql statement is excuted
-   * it provided with a param that hold the data of the the sql statement excuted before
-   * so we can handle it at the function definetion to do some operations on this sql result
    * @param {*} options take a object that contains 3 constrains and do some operations depending on the statue of this constrains
    * limit => limit the returned data of a query to provided number
    * where => make a conditional query depending on what is provided to this where
    * order => is an object that has a {by,type} keys and ordring the query result in this order
    * 
    */
-  get(callBack = data => { }, options = { limit: null, where: null, order: null }) {
+  get(options = { limit: null, where: null, order: null }) {
 
     let { limit, where, order } = options
     let sqlStatment
@@ -56,103 +57,151 @@ class Model {
     else if (limit == null && where != null && order == null)
       sqlStatment = `SELECT * FROM ${this.tabelName} WHERE ${where}`
 
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(sqlStatment, (queryErr, result) => {
-        if (queryErr) throw queryErr;
-        this.connection.destroy()
-        callBack(result)
-      });
-    });
+    return new Promise((resolve, reject) => {
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(sqlStatment, (queryErr, result) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve(result)
+          });
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    })
   }
   /**
    * 
    * @param {*} SQLQuery sql query to be excuted
-   * @param {*} callBack a function that holds the result of the query and manipulate the result
    */
-  excute(SQLQuery, callBack = (data) => { }) {
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(SQLQuery, (queryErr, result) => {
-        if (queryErr) throw queryErr;
-        this.connection.destroy()
-        callBack(result)
-      });
-    });
+  excute(SQLQuery) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(SQLQuery, (queryErr, result) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve(result)
+          });
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    })
   }
 
-  add(data, callBack = () => { }) {
+  async add(data, options = { unique: [{ key: null, value: null }] }) {
     let cols = []
     let values = []
     for (const key in data) {
       cols.push(key)
       values.push(data[key])
     }
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
-        if (queryErr) throw queryErr;
-        this.connection.destroy()
-        callBack()
-        // console.log(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`)
-      });
-    });
-  }
-
-  delete(where, callBack = () => { }) {
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      this.connection.query(`DELETE FROM ${this.tabelName} WHERE ${where}`, (queryErr) => {
-        if (queryErr) throw queryErr;
-        this.connection.destroy()
-        callBack()
-      });
-    });
-  }
-
-  update(data, where, callBack = () => { }) {
-    let cols = []
-    let values = []
-    for (const key in data) {
-      cols.push(key)
-      values.push(data[key])
-    }
-    this.connection.connect(connectionErr => {
-      if (connectionErr) throw connectionErr;
-      let sql = `UPDATE ${this.tabelName} SET`
-      let final = cols.length - 1
+    let { unique } = options
+    if (unique[0].key != null) {
+      let uniqueValues = ``
       let counter = 0
-      cols.forEach(col => {
-        if (counter == final)
-          sql += ` ${col} = '${values[counter]}'`
+      unique.forEach(element => {
+        if (counter == unique.length - 1)
+          uniqueValues += `${element.key} = '${element.value}'`
         else
-          sql += ` ${col} = '${values[counter]}',`
+          uniqueValues += `${element.key} = '${element.value}' OR `
         counter++
       });
-      sql += ` WHERE ${where}`
-      this.connection.query(sql, (queryErr) => {
-        if (queryErr) throw queryErr;
-        this.connection.destroy()
-        callBack()
-      });
+      let checkData = await this.get({ where: uniqueValues })
+      if (checkData.length == 0)
+        return new Promise((resolve, reject) => {
+          try {
+            this.connect()
+            this.connection.connect(connectionErr => {
+              if (connectionErr) throw connectionErr;
+              this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+                this.disconnect()
+                if (queryErr) throw queryErr;
+                resolve(0)
+              });
+            });
+          } catch (error) {
+            console.log(error)
+          }
+        })
+      else return `some information is already used before`
+    }
+    else
+      return new Promise((resolve, reject) => {
+        try {
+          this.connect()
+          this.connection.connect(connectionErr => {
+            if (connectionErr) throw connectionErr;
+            this.connection.query(`INSERT INTO ${this.tabelName} (${cols.join(", ")}) VALUES ('${values.join("', '")}')`, (queryErr) => {
+              this.disconnect()
+              if (queryErr) throw queryErr;
+              resolve(0)
+            });
+          });
+        } catch (error) {
+          console.log(error)
+        }
+      })
+  }
+
+  delete(where) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(`DELETE FROM ${this.tabelName} ${where}`, (queryErr) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve("Deleted")
+          });
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  }
+
+  update(data, where) {
+    let cols = []
+    let values = []
+    for (const key in data) {
+      cols.push(key)
+      values.push(data[key])
+    }
+    let sql = `UPDATE ${this.tabelName} SET`
+    let final = cols.length - 1
+    let counter = 0
+    cols.forEach(col => {
+      if (counter == final)
+        sql += ` ${col} = '${values[counter]}'`
+      else
+        sql += ` ${col} = '${values[counter]}',`
+      counter++
     });
+    sql += ` WHERE ${where}`
+    return new Promise((resolve, reject) => {
+      try {
+        this.connect()
+        this.connection.connect(connectionErr => {
+          if (connectionErr) throw connectionErr;
+          this.connection.query(sql, (queryErr) => {
+            this.disconnect()
+            if (queryErr) throw queryErr;
+            resolve("Updated")
+          });
+        });
+      } catch (error) {
+        console.log(error)
+      }
+    })
   }
 }
-
-// new Model("users").add({
-//   id: 1,
-//   fname: "eslam",
-//   lname: "magdy",
-//   email: "eslam3400@gmail.com"
-// })
-
-// new Model("users").update({
-//   id: 2,
-//   fname: "updated",
-//   lname: "updated",
-//   email: "updated"
-// }, "id = 0")
-
-// new Model('users').get({ where: "req.cookies.token" }, data => console.log(data[0].id))
 
 module.exports = Model;
