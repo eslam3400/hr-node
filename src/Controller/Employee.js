@@ -4,11 +4,11 @@ const JobModel = require('../Model/JobModel')
 const LoanModel = require('../Model/LoanModel')
 const AttendanceModel = require('../Model/AttendanceModel')
 const { uploadFile } = require('../Utilities/Utility')
-const { getDate } = require('./Attendance')
+const { getDate, timeInNumberFormat } = require('./Attendance')
 
 let unique = async (field = { key: null, value: null }) => {
   let users = await new UserModel().get({ where: `${field.key} = '${field.value}'` })
-  return (users.length == 0) ? true : false
+  return users.length == 0
 }
 
 let generateBarcode = () => {
@@ -17,6 +17,17 @@ let generateBarcode = () => {
   else return generateBarcode()
 }
 
+let validatBarcode = (barcode) => {
+  if (barcode == '') return generateBarcode()
+  else
+    if (unique({ key: 'barcode', value: barcode })) return barcode
+    else return null
+}
+
+let calculateWorkHours = (start, end) => Math.abs(timeInNumberFormat(start) - timeInNumberFormat(end))
+
+let calculateHourPrice = (salary, workHours) => salary / (workHours * 30)
+
 let addEmployeePage = async (req, res) => {
   let pranchs = await new PranchModel().get()
   let jobs = await new JobModel().get()
@@ -24,23 +35,22 @@ let addEmployeePage = async (req, res) => {
 }
 
 let addEmployee = async (req, res) => {
-  if (req.body.barcode == '') generateBarcode()
-  else {
-    if (unique({ key: 'barcode', value: req.body.barcode })) {
-      let img = await uploadFile(req.files.attachment)
-      if (img) {
-        req.body.img = img
-        new UserModel().add(req.body)
-      } else return res.render('admin/add-employee', { msg: `error uploading the attachment` })
-    } else return res.render('admin/add-employee', { msg: `this barcode is already in use` })
-  }
+  let barcode = validatBarcode(req.body.barcode)
+  if (barcode == null) return res.redirect('/employees')
+  req.body.barcode = barcode
+  req.body.workHours = calculateWorkHours(req.body.startTime, req.body.endTime)
+  req.body.hourPrice = calculateHourPrice(req.body.salary, req.body.workHours)
+  let img = await uploadFile(req.files.attachment)
+  if (img) { req.body.img = img } else { req.body.img = 'defualt.jpg' }
+  new UserModel().add(req.body)
+  return res.redirect('/employees')
 }
 
 let employees = async (req, res) => {
-  let employees = await new UserModel().get({ where: `role <> 'admin'` })
+  let employeesData = await new UserModel().get({ where: `role <> 'admin'` })
   let pranchs = await new PranchModel().get()
   let jobs = await new JobModel().get()
-  return res.render('admin/employees', { employees, pranchs, jobs })
+  return res.render('admin/employees', { employees: employeesData, pranchs, jobs })
 }
 
 let deleteEmployee = (req, res) => {

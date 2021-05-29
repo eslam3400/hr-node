@@ -1,34 +1,50 @@
-const Model = require('../Model/Model')
+const UserModel = require('../Model/UserModel')
+const AttendanceModel = require('../Model/AttendanceModel')
 
-let barcodePage = (req, res) => res.render('barcode', { message: "" })
+let barcodePage = (req, res) => res.render('barcode', { msg: null })
+
+let changeStatue = (user) => {
+  if (user.statue == 'offline') return new UserModel().update({ statue: 'online' }, `id = ${user.id}`)
+  else if (user.statue == 'online') return new UserModel().update({ statue: 'offline' }, `id = ${user.id}`)
+}
+
+let checkIfUserAlreadyCheckedin = async (user) => {
+  let attendance = await new AttendanceModel().get({ where: `user_id = ${user.id} AND day = '${getDate('today')}'` })
+  return (attendance.length === 1)
+}
+
+let checkIn = async (user) => {
+  new AttendanceModel().add({ user_id: user.id })
+  changeStatue(user)
+}
+
+let checkOut = async (user) => {
+  let attendance = await new AttendanceModel().get({ where: `user_id = ${user.id} AND day = '${getDate('today')}'` })
+  user.startTime = attendance[0].start
+  user.endTime = getTime()
+  if (attendance.length == 1) new AttendanceModel().update({ finsih: getTime(), worked_time: calculateWorkedTime(user) }, `user_id = ${user.id} AND day = '${getDate('today')}'`)
+  else new AttendanceModel().update({ finsih: getTime(), worked_time: calculateWorkedTime(user) }, `user_id = ${user.id} AND day = '${getDate('yesterday')}'`)
+  changeStatue(user)
+}
 
 /**
  * Take Attendance With Barcode by get the user data by barcode then check his statue ['online','offline']
  * if offline update user data in the users table to be online and add record to the att table
  * if online update user data in the users table to be offline and update record of the att table
  */
-let barcode = (req, res) => {
-  new Model("users").get(user_data => {
-    if (user_data.length == 1)
-      if (user_data[0].statue == 'offline') {
-        new Model("att").add({ user_id: user_data[0].id })
-        new Model("users").update({ statue: 'online' }, `id = ${user_data[0].id}`)
-      } else {
-        new Model("att").get(att_data => {
-          if (att_data.length == 1)
-            new Model("att").update({
-              finsih: getTime(),
-              worked_time: calculateWorkedTime(timeInNumberFormat(att_data[0].start), getTime())
-            }, `user_id = ${user_data[0].id} AND day = '${getDate('today')}'`)
-          else if (att_data.length == 0)
-            new Model("att").update({
-              finsih: getTime(),
-              worked_time: calculateWorkedTime(timeInNumberFormat(att_data[0].start), getTime())
-            }, `user_id = ${user_data[0].id} AND day = '${getDate('yesterday')}'`)
-          new Model("users").update({ statue: 'offline' }, `id = ${user_data[0].id}`)
-        }, { where: `user_id = ${user_data[0].id} AND day = '${getDate('today')}'` })
+let barcode = async (req, res) => {
+  let users = await new UserModel().get({ where: `barcode = ${req.body.barcode}` })
+  if (users.length == 1)
+    if (users[0].statue == 'offline')
+      if (await checkIfUserAlreadyCheckedin(users[0])) res.render('redirectPage', { msg: 'user is already checked in for today!!', url: '/barcode' })
+      else {
+        checkIn(users[0])
+        res.render('redirectPage', { msg: 'user is checked in', url: '/barcode' })
       }
-  }, { where: `barcode = ${req.body.barcode}` })
+    else {
+      checkOut(users[0])
+      res.render('redirectPage', { msg: 'user is checked out', url: '/barcode' })
+    }
 }
 
 /**
@@ -110,6 +126,6 @@ let timeInNumberFormat = (timeStamp) => {
   return time
 }
 
-let calculateWorkedTime = (start, end) => Math.abs(start - timeInNumberFormat(end))
+let calculateWorkedTime = (user) => Math.abs(timeInNumberFormat(user.startTime) - timeInNumberFormat(user.endTime))
 
-module.exports = { barcode, barcodePage, getDate }
+module.exports = { barcode, barcodePage, getDate, timeInNumberFormat }

@@ -1,4 +1,4 @@
-let { uploadPath } = require('../../uploadPath')
+const { uploadPath } = require('../../uploadPath')
 const uuid = require('uuid').v4
 
 let uploadFile = async file => {
@@ -6,9 +6,8 @@ let uploadFile = async file => {
     let fileExtention = file.mimetype
     fileExtention = fileExtention.slice(fileExtention.indexOf("/") + 1)
     file.name = uuid() + '.' + fileExtention
-    uploadPath += file.name
     return new Promise((resolve, reject) => {
-      file.mv(uploadPath, err => {
+      file.mv(uploadPath + file.name, err => {
         if (err) resolve(null)
         else resolve(file.name)
       })
@@ -23,8 +22,7 @@ let uploadFiles = async files => {
         let fileExtention = file.mimetype
         fileExtention = fileExtention.slice(fileExtention.indexOf("/") + 1)
         file.name = uuid() + '.' + fileExtention
-        uploadPath += file.name
-        file.mv(uploadPath + file.name, err => {
+        file.mv(uploadPath + file.name + file.name, err => {
           if (err) console.log(err)
           else console.log('done')
         })

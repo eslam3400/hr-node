@@ -31,6 +31,7 @@ app.use(fileUpload())
 app.get('/', Controller.Dashboard.dashboard) //done
 app.get('/login', Controller.Auth.loginPage) //done
 app.post('/login', Controller.Auth.login) //done
+app.get('/logout', Controller.Auth.logout) //done
 app.get('/employees', Controller.Employee.employees) //done
 app.get('/employee/add', Controller.Employee.addEmployeePage) //done
 app.post('/employee/add', Controller.Employee.addEmployee) //done

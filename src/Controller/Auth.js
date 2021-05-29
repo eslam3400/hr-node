@@ -1,15 +1,13 @@
-const Model = require('../Model/Model')
+const UserModel = require('../Model/UserModel')
 
 let loginPage = (req, res) => res.render('admin/login', { msg: "" })
 
-let login = (req, res) =>
-  new Model('users').get(data => {
-    if (data.length > 0) res.cookie('token', data[0].id, { maxAge: 43200000 }).redirect('/')
-    else res.render('admin/login', { msg: "loginError" })
-  }, { where: `username = '${req.body.username}' AND password = '${req.body.password}' AND role = 'admin'` })
+let login = async (req, res) => {
+  let users = await new UserModel().get({ where: `username = '${req.body.username}' AND password = '${req.body.password}' AND role = 'admin'` })
+  if (users.length == 1) return res.cookie('token', users[0].id, { maxAge: 43200000 }).redirect('/employees')
+  else return res.render('admin/login', { msg: "loginError" })
+}
 
-let logout = (req, res) => res.clearCookie('token').redirect('/')
-
-// checkIfFieldUnique(unique => console.log(unique), { name: "username", value: "eslam34000" })
+let logout = (req, res) => res.clearCookie('token').redirect('/login')
 
 module.exports = { loginPage, login, logout }
