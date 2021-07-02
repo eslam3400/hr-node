@@ -87,9 +87,15 @@ let employee = async (req, res) => {
   return res.render('employee', { employeeData })
 }
 
+let reportPage = async (req, res) => {
+  let users = await new UserModel().get({ where: `id = ${req.params.id}` })
+  res.render('admin/select-report-date', { user: users[0] })
+}
+
 let report = async (req, res) => {
-  let attendance = await new AttendanceModel().get({ where: `id = ${req.params.id} AND day LIKE '${req.params.year}-${req.params.month}%'` })
-  res.render('employe-report', { attendance })
+  let users = await new UserModel().get({ where: `id = ${req.params.id}` })
+  let attendance = await new AttendanceModel().get({ where: `user_id = ${req.params.id} AND day LIKE '%${req.params.year}-${req.params.month}%'` })
+  res.render('admin/employee-report', { attendance, user: users[0] })
 }
 
 module.exports = {
@@ -102,5 +108,6 @@ module.exports = {
   loanPage,
   loan,
   updatePage,
-  update
+  update,
+  reportPage
 }

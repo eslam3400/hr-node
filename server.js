@@ -40,10 +40,16 @@ app.get('/employee/loan/:id', Controller.Employee.loanPage) //done
 app.post('/employee/loan/:id', Controller.Employee.loan) //done
 app.get('/employee/update/:id', Controller.Employee.updatePage) //done
 app.post('/employee/update/:id', Controller.Employee.update) //done
+app.get('/employee/report/:id/:year/:month', Controller.Employee.report) //done
+app.post('/employee/report/:id/edit/:day', Controller.Employee.report) //done
+app.get('/reports', Controller.Reports.reportsPage)
+app.get('/report/:id', Controller.Employee.reportPage)
 app.get('/barcode', Controller.Attendance.barcodePage)
 app.post('/barcode', Controller.Attendance.barcode)
-app.get('/employee/:id', Controller.Attendance.barcode)
-app.get('/report/:id/:year/:month', Controller.Attendance.barcode)
-app.get('*', (req, res) => res.send("404"))
+app.get('/job/add', Controller.Dashboard.addJobPage)
+app.post('/job/add', Controller.Dashboard.addJob)
+app.get('/pranch/add', Controller.Dashboard.addPranchPage)
+app.post('/pranch/add', Controller.Dashboard.addPranch)
+app.get('*', (req, res) => res.render("admin/404"))
 
 app.listen(process.env.PORT || port, () => console.log(`app listening at http://localhost:${port}`))

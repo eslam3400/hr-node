@@ -1,17 +1,19 @@
-<%- include('includes/start') %> 
+<%- include('includes/start') %>
 	<div class="main-container">
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
 				<!-- Export Datatable start -->
 				<div class="card-box mb-30">
 					<div class="pd-20">
-						<h4 class="text-blue h4">Data Table with Export Buttons</h4>
+						<h4 class="text-blue h4">Employees Data</h4>
 						<select id="pranch-employees" class="form-control w-25 mb-3">
-              <option value="all">Choose Pranch...</option>
-              <% pranchs.forEach(pranch => { %>
-              <option value="<%= pranch.name %>"><%= pranch.name %></option>
-              <% }) %>
-            </select>
+							<option value="all">Choose Pranch...</option>
+							<% pranchs.forEach(pranch=> { %>
+								<option value="<%= pranch.name %>">
+									<%= pranch.name %>
+								</option>
+								<% }) %>
+						</select>
 					</div>
 					<div class="pb-20">
 						<table id="employees-table" class="table hover multiple-select-row data-table-export nowrap">
@@ -19,50 +21,68 @@
 								<tr>
 									<th>ID</th>
 									<th>Name</th>
-                  <th>Pranch</th>
-                  <th>Job</th>
-                  <th>Salary</th>
-                  <th>Actions</th>
+									<th>Pranch</th>
+									<th>Job</th>
+									<th>Salary</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								<% employees.forEach(employee => { %>
-                  <tr>
-                    <td><%= employee.id %></td>
-                    <td><%= employee.firstName + ' ' + employee.lastName %></td>
-                    <% pranchs.forEach(pranch => { %> <% if (pranch.id ==
-                    employee.pranch_id) { %>
-                    <td><%= pranch.name %></td>
-                    <% } %> <% }) %> <% jobs.forEach(job => { %> <% if (job.id
-                    == employee.job_id) { %>
-                    <td><%= job.name %></td>
-                    <% } %> <% }) %>
-                    <td class="text-primary"><%= employee.salary %></td>
-                    <td>
-											<div class="dropdown">
-											<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-												<i class="dw dw-more"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" style="">
-												<a class="dropdown-item" href="/employee/update/<%= employee.id %>"><i class="dw dw-eye"></i> Update</a>
-												<a class="dropdown-item" href="/employee/loan/<%= employee.id %>"><i class="dw dw-edit2"></i> Loan</a>
-												<a class="dropdown-item" href="/employee/delete/<%= employee.id %>"><i class="dw dw-delete-3"></i> Delete</a>
-											</div>
-										</div>
-										</div>
-									</td>
-                  </tr>
-                <% }) %>
-							</tbody>
-						</table>
+								<% employees.forEach(employee=> { %>
+									<tr>
+										<td>
+											<%= employee.id %>
+										</td>
+										<td>
+											<%= employee.firstName + ' ' + employee.lastName %>
+										</td>
+										<% pranchs.forEach(pranch=> { %> <% if (pranch.id==employee.pranch_id) { %>
+												<td>
+													<%= pranch.name %>
+												</td>
+												<% } %>
+													<% }) %>
+														<% jobs.forEach(job=> { %> <% if (job.id==employee.job_id) { %>
+																<td>
+																	<%= job.name %>
+																</td>
+																<% } %>
+																	<% }) %>
+																		<td class="text-primary">
+																			<%= employee.salary %>
+																		</td>
+																		<td>
+																			<div class="dropdown">
+																				<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle"
+																					href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+																					<i class="dw dw-more"></i>
+																				</a>
+																				<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" style="">
+																					<a class="dropdown-item" href="/employee/update/<%= employee.id %>"><i
+																							class="dw dw-eye"></i> Update</a>
+																					<a class="dropdown-item" href="/employee/loan/<%= employee.id %>"><i
+																							class="dw dw-edit2"></i> Loan</a>
+																					<a class="dropdown-item" href="/employee/delete/<%= employee.id %>"><i
+																							class="dw dw-delete-3"></i> Delete</a>
+																					<a class="dropdown-item" href="/report/<%= employee.id %>"><i
+																							class="icon-copy fa fa-vcard" aria-hidden="true"></i></i> Report</a>
+																				</div>
+																			</div>
 					</div>
+					</td>
+					</tr>
+					<% }) %>
+						</tbody>
+						</table>
 				</div>
-				<!-- Export Datatable End -->
 			</div>
-			<div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div>
+			<!-- Export Datatable End -->
 		</div>
+		<div class="footer-wrap pd-20 mb-20 card-box">
+			DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit
+				Hingarajiya</a>
+		</div>
+	</div>
 	</div>
 	<!-- js -->
 	<script src="/admin/vendors/scripts/core.js"></script>
@@ -82,7 +102,8 @@
 	<script src="/admin/src/plugins/datatables/js/pdfmake.min.js"></script>
 	<script src="/admin/src/plugins/datatables/js/vfs_fonts.js"></script>
 	<!-- Datatabl/admin/e Setting js -->
-	<script src="/admin/vendors/scripts/datatable-setting.js"></script></body>
+	<script src="/admin/vendors/scripts/datatable-setting.js"></script>
+	</body>
 	<script>
 		$('#pranch-employees').change(() => {
 			let table = document.getElementById("employees-table");
@@ -102,4 +123,5 @@
 				}
 		})
 	</script>
-</html>
+
+	</html>
