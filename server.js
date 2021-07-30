@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 /**
  * by using this i can access data from post reqest with the body object
  */
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: false }))
 /**
  * by using this i can access cookies data from cookies object
  */
@@ -28,7 +28,7 @@ app.use(cookie("DevTik"))
  */
 app.use(fileUpload())
 
-app.get('/', Controller.Dashboard.dashboard) //done
+app.get('/', (req, res) => res.json({ msg: ":D" })) //done
 app.get('/login', Controller.Auth.loginPage) //done
 app.post('/login', Controller.Auth.login) //done
 app.get('/logout', Controller.Auth.logout) //done

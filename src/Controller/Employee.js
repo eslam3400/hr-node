@@ -40,8 +40,10 @@ let addEmployee = async (req, res) => {
   req.body.barcode = barcode
   req.body.workHours = calculateWorkHours(req.body.startTime, req.body.endTime)
   req.body.hourPrice = calculateHourPrice(req.body.salary, req.body.workHours)
-  let img = await uploadFile(req.files.attachment)
-  if (img) { req.body.img = img } else { req.body.img = 'defualt.jpg' }
+  if (req.files) {
+    let img = await uploadFile(req.files.attachment)
+    if (img) { req.body.img = img } else { req.body.img = 'defualt.jpg' }
+  }
   new UserModel().add(req.body)
   return res.redirect('/employees')
 }
