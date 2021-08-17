@@ -1,34 +1,29 @@
 <%- include('includes/start') %>
-<div class="main-container">
-  <div class="pd-ltr-20 xs-pd-20-10">
-    <div class="min-height-200px">
-      <!-- horizontal Basic Forms Start -->
-      <div class="pd-20 card-box mb-30">
-        <div class="clearfix">
-          <div class="pull-left">
-            <h4 class="text-blue h4">
-              Add Loan For Employee <%= user.firstName + ' ' + user.lastName %>
-            </h4>
-            <p class="mb-30">
-              Complete this form to add new employee loan to the database
-            </p>
+  <div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+      <div class="min-height-200px">
+        <!-- horizontal Basic Forms Start -->
+        <div class="pd-20 card-box mb-30">
+          <div class="clearfix">
+            <div class="pull-left">
+              <h4 class="text-blue h4">
+                Add Loan For Employee <%= user.firstName + ' ' + user.lastName %>
+              </h4>
+              <p class="mb-30">
+                Complete this form to add new employee loan to the database
+              </p>
+            </div>
           </div>
+          <form action="/admin/employee/loan/<%= user.id%>" method="post">
+            <div class="form-group">
+              <label>Loan Vlaue</label>
+              <input type="number" class="form-control" name="loan_value" placeholder="Loan..." />
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+          </form>
         </div>
-        <form action="/employee/loan/<%= user.id%>" method="post">
-          <div class="form-group">
-            <label>Loan Vlaue</label>
-            <input
-              type="number"
-              class="form-control"
-              name="loan_value"
-              placeholder="Loan..."
-            />
-          </div>
-          <button type="submit" class="btn btn-primary">Add</button>
-        </form>
+        <!-- horizontal Basic Forms End -->
       </div>
-      <!-- horizontal Basic Forms End -->
+      <%- include('includes/end') %>
     </div>
-    <%- include('includes/end') %>
   </div>
-</div>

@@ -1,106 +1,84 @@
 <%- include('includes/start') %>
-<div class="main-container">
-  <div class="pd-ltr-20 xs-pd-20-10">
-    <div class="min-height-200px">
-      <!-- horizontal Basic Forms Start -->
-      <div class="pd-20 card-box mb-30">
-        <div class="clearfix">
-          <div class="pull-left">
-            <h4 class="text-blue h4">Add Employee</h4>
-            <p class="mb-30">
-              Complete this form to add new employee to the database
-            </p>
-          </div>
-        </div>
-        <form
-          action="/employee/add"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div class="form-group">
-            <label>First Name</label>
-            <input
-              type="text"
-              class="form-control"
-              name="firstName"
-              placeholder="First Name"
-            />
-          </div>
-          <div class="form-group">
-            <label>Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              name="lastName"
-              placeholder="Last Name"
-            />
-          </div>
-          <div class="form-group">
-            <label>Salary</label>
-            <input
-              type="number"
-              class="form-control"
-              name="salary"
-              placeholder="Salary"
-            />
-          </div>
-          <div class="form-group">
-            <label>Job Title</label>
-            <select name="job_id" id="job_id" class="form-control">
-              <option value="NULL"></option>
-              <% jobs.forEach(job => { %>
-              <option value="<%= job.id %>"><%= job.name %></option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="startTime">Start Time</label>
-            <input
-              type="time"
-              class="form-control"
-              name="startTime"
-              id="startTime"
-            />
-          </div>
-          <div class="form-group">
-            <label for="endTime">End Time</label>
-            <input
-              type="time"
-              class="form-control"
-              name="endTime"
-              id="endTime"
-            />
-          </div>
-          <div class="form-group">
-            <label for="pranch">Pranch</label>
-            <select id="pranch" name="pranch_id" class="form-control">
-              <option value="NULL" selected>Choose Pranch...</option>
-              <% pranchs.forEach(pranch => { %>
-              <option value="<%= pranch.id %>"><%= pranch.name %></option>
-              <% }) %>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Barcode</label>
-            <input
-              type="number"
-              class="form-control"
-              name="barcode"
-              placeholder="Barcode"
-            />
-          </div>
-          <div class="form-group">
-            <label>Custom file input</label>
-            <div class="custom-file">
-              <input type="file" name="attachment" class="custom-file-input" />
-              <label class="custom-file-label">Choose file</label>
+  <div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+      <div class="min-height-200px">
+        <!-- horizontal Basic Forms Start -->
+        <div class="pd-20 card-box mb-30">
+          <div class="clearfix">
+            <div class="pull-left">
+              <h4 class="text-blue h4">Add Employee</h4>
+              <p class="mb-30">
+                Complete this form to add new employee to the database
+              </p>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Add</button>
-        </form>
+          <form action="/admin/employee/add" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label>First Name</label>
+              <input type="text" class="form-control" name="firstName" placeholder="First Name" />
+            </div>
+            <div class="form-group">
+              <label>Last Name</label>
+              <input type="text" class="form-control" name="lastName" placeholder="Last Name" />
+            </div>
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" class="form-control" name="username" placeholder="Username" />
+            </div>
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" class="form-control" name="password" placeholder="Password" />
+            </div>
+            <div class="form-group">
+              <label>Salary</label>
+              <input type="number" class="form-control" name="salary" placeholder="Salary" />
+            </div>
+            <div class="form-group">
+              <label>Job Title</label>
+              <select name="job_id" id="job_id" class="form-control">
+                <option value="NULL"></option>
+                <% jobs.forEach(job=> { %>
+                  <option value="<%= job.id %>">
+                    <%= job.name %>
+                  </option>
+                  <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="startTime">Start Time</label>
+              <input type="time" class="form-control" name="startTime" id="startTime" />
+            </div>
+            <div class="form-group">
+              <label for="endTime">End Time</label>
+              <input type="time" class="form-control" name="endTime" id="endTime" />
+            </div>
+            <div class="form-group">
+              <label for="pranch">Pranch</label>
+              <select id="pranch" name="pranch_id" class="form-control">
+                <option value="NULL" selected>Choose Pranch...</option>
+                <% pranchs.forEach(pranch=> { %>
+                  <option value="<%= pranch.id %>">
+                    <%= pranch.name %>
+                  </option>
+                  <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Barcode</label>
+              <input type="number" class="form-control" name="barcode" placeholder="Barcode" />
+            </div>
+            <div class="form-group">
+              <label>Custom file input</label>
+              <div class="custom-file">
+                <input type="file" name="attachment" class="custom-file-input" />
+                <label class="custom-file-label">Choose file</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+          </form>
+        </div>
+        <!-- horizontal Basic Forms End -->
       </div>
-      <!-- horizontal Basic Forms End -->
+      <%- include('includes/end') %>
     </div>
-    <%- include('includes/end') %>
   </div>
-</div>

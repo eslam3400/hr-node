@@ -1,11 +1,12 @@
-<%- include('includes/start') %> 
+<%- include('includes/start') %>
 	<div class="main-container">
 		<div class="pd-ltr-20 xs-pd-20-10">
 			<div class="min-height-200px">
 				<!-- Export Datatable start -->
 				<div class="card-box mb-30">
 					<div class="pd-20">
-						<h4 class="text-blue h4">Report For <%= user.firstName + ' ' + user.lastName %></h4>
+						<h4 class="text-blue h4">Report For <%= user.firstName + ' ' + user.lastName %>
+						</h4>
 					</div>
 					<div class="pb-20">
 						<table id="employees-table" class="table hover multiple-select-row data-table-export nowrap">
@@ -13,47 +14,65 @@
 								<tr>
 									<th>Day</th>
 									<th>Start</th>
-                  <th>Finish</th>
-                  <th>Worked Time</th>
-                  <th>Bounce</th>
-                  <th>Subtract</th>
-                  <th>Note</th>
-                  <th>Actions</th>
+									<th>Finish</th>
+									<th>Worked Time</th>
+									<th>Bounce</th>
+									<th>Subtract</th>
+									<th>Note</th>
+									<th>Actions</th>
 								</tr>
 							</thead>
 							<tbody>
-								<% attendance.forEach(record => { %>
-                  <tr <% if (user.workHours < record.worked_time) { %> style="background-color: tomato" <% } %>>
-                    <td><%= record.day %></td>
-                    <td><%= record.start %></td>
-                    <td><%= record.finsih %></td>
-                    <td><%= record.worked_time %></td>
-                    <td><%= record.bounes %></td>
-                    <td><%= record.subtract %></td>
-                    <td><%= record.note %></td>
-                    <td>
-											<div class="dropdown">
-											<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
-												<i class="dw dw-more"></i>
-											</a>
-											<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" style="">
-												<a class="dropdown-item" href="/employee/report/<%= user.id %>/edit/<%= record.day %>"><i class="dw dw-eye"></i> Edit</a>
-											</div>
-										</div>
-										</div>
-									</td>
-                  </tr>
-                <% }) %>
-							</tbody>
-						</table>
+								<% attendance.forEach(record=> { %>
+									<tr <% if (user.workHours < record.worked_time) { %> style="background-color: tomato" <% } %>>
+											<td>
+												<%= record.day.toDateString() %>
+											</td>
+											<td>
+												<%= record.start %>
+											</td>
+											<td>
+												<%= record.finsih %>
+											</td>
+											<td>
+												<%= record.worked_time %>
+											</td>
+											<td>
+												<%= record.bounes %>
+											</td>
+											<td>
+												<%= record.subtract %>
+											</td>
+											<td>
+												<%= record.note %>
+											</td>
+											<td>
+												<div class="dropdown">
+													<a class="btn btn-link font-24 p-0 line-height-1 no-arrow dropdown-toggle" href="#"
+														role="button" data-toggle="dropdown" aria-expanded="false">
+														<i class="dw dw-more"></i>
+													</a>
+													<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" style="">
+														<a class="dropdown-item"
+															href="/admin/employee/report/<%= user.id %>/edit/<%= year %>/<%= month %>/<%= record.day.getDate() %>"><i
+																class="dw dw-eye"></i> Edit</a>
+													</div>
+												</div>
 					</div>
+					</td>
+					</tr>
+					<% }) %>
+						</tbody>
+						</table>
 				</div>
-				<!-- Export Datatable End -->
 			</div>
-			<div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div>
+			<!-- Export Datatable End -->
 		</div>
+		<div class="footer-wrap pd-20 mb-20 card-box">
+			DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit
+				Hingarajiya</a>
+		</div>
+	</div>
 	</div>
 	<!-- js -->
 	<script src="/admin/vendors/scripts/core.js"></script>
@@ -73,7 +92,8 @@
 	<script src="/admin/src/plugins/datatables/js/pdfmake.min.js"></script>
 	<script src="/admin/src/plugins/datatables/js/vfs_fonts.js"></script>
 	<!-- Datatabl/admin/e Setting js -->
-	<script src="/admin/vendors/scripts/datatable-setting.js"></script></body>
+	<script src="/admin/vendors/scripts/datatable-setting.js"></script>
+	</body>
 	<script>
 		$('#pranch-employees').change(() => {
 			let table = document.getElementById("employees-table");
@@ -93,4 +113,5 @@
 				}
 		})
 	</script>
-</html>
+
+	</html>

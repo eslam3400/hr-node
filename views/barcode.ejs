@@ -1,48 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="/admin/vendors/styles/core.css"
-    />
-    <title>Attendance</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-dark bg-dark">
-      <div class="container-fluid">
-        <span class="navbar-brand m-auto h1">Attendance Barcode</span>
-      </div>
-    </nav>
-    <section class="mt-5 pt-5">
-      <form
-        id="barcodeInput"
-        action="/barcode"
-        method="POST"
-        class="m-auto w-25 pt-5"
-      >
-        <div id="alert">
-          <% if (msg) { %>
-          <div class="alert alert-danger" role="alert"><%= msg %></div>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" type="text/css" href="/admin/vendors/styles/core.css" />
+  <title>Attendance</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+      <span class="navbar-brand m-auto h1">Attendance Barcode</span>
+    </div>
+  </nav>
+  <section class="mt-5 pt-5">
+    <form id="barcodeInput" action="/barcode" method="POST" class="m-auto w-25 pt-5">
+      <div id="alert">
+        <% if (msg) { %>
+          <div class="alert alert-danger" role="alert">
+            <%= msg %>
+          </div>
           <% } %>
-        </div>
-        <div class="mt-5">
-          <label for="exampleInputEmail1" class="form-label"
-            >Please Provide Your Barcode</label
-          >
-          <input
-            class="w-100"
-            type="number"
-            id="barcode"
-            name="barcode"
-            autofocus
-          />
-        </div>
-      </form>
-    </section>
-    <script src="/admin/vendors/scripts/core.js"></script>
-  </body>
+      </div>
+      <div class="mt-5">
+        <label for="exampleInputEmail1" class="form-label">Please Provide Your Barcode</label>
+        <input class="w-100" type="number" id="barcode" name="barcode" autofocus />
+      </div>
+    </form>
+  </section>
+  <script src="/admin/vendors/scripts/core.js"></script>
+</body>
+
 </html>

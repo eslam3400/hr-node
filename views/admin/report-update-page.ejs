@@ -1,0 +1,33 @@
+<%- include('includes/start') %>
+  <div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+      <div class="min-height-200px">
+        <!-- horizontal Basic Forms Start -->
+        <div class="pd-20 card-box mb-30">
+          <div class="clearfix">
+            <div class="pull-left">
+              <h4 class="text-blue h4">Update Report</h4>
+            </div>
+          </div>
+          <form action="/admin/employee/report/<%= user.id %>/edit/<%= year %>/<%= month %>/<%= day %>" method="post"
+            enctype="multipart/form-data">
+            <div class="form-group">
+              <label>Bounce</label>
+              <input type="number" class="form-control" name="bounes" placeholder="Bounce"
+                value="<%= report.bounes %>" />
+            </div>
+            <div class="form-group">
+              <label>Subtract</label>
+              <input type="number" class="form-control" name="subtract" placeholder="Subtract"
+                value="<%= report.subtract %>" />
+            </div>
+            <div class="form-group">
+              <label>Note</label>
+              <input type="text" class="form-control" name="note" placeholder="Note" value="<%= report.note %>" />
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+          </form>
+        </div>
+        <!-- horizontal Basic Forms End -->
+      </div>
+      <%- include('includes/end') %>

@@ -36,7 +36,7 @@ let addEmployeePage = async (req, res) => {
 
 let addEmployee = async (req, res) => {
   let barcode = validatBarcode(req.body.barcode)
-  if (barcode == null) return res.redirect('/employees')
+  if (barcode == null) barcode = generateBarcode();
   req.body.barcode = barcode
   req.body.workHours = calculateWorkHours(req.body.startTime, req.body.endTime)
   req.body.hourPrice = calculateHourPrice(req.body.salary, req.body.workHours)
@@ -45,7 +45,7 @@ let addEmployee = async (req, res) => {
     if (img) { req.body.img = img } else { req.body.img = 'defualt.jpg' }
   }
   new UserModel().add(req.body)
-  return res.redirect('/employees')
+  return res.redirect('/admin/employees')
 }
 
 let employees = async (req, res) => {
@@ -57,7 +57,7 @@ let employees = async (req, res) => {
 
 let deleteEmployee = (req, res) => {
   new UserModel().delete(`id = ${req.params.id}`)
-  return res.redirect('/employees')
+  return res.redirect('/admin/employees')
 }
 
 let loanPage = async (req, res) => {
@@ -69,7 +69,7 @@ let loan = (req, res) => {
   req.body.employee_id = req.params.id
   req.body.date = getDate('today')
   new LoanModel().add(req.body)
-  return res.redirect('/employees')
+  return res.redirect('/admin')
 }
 
 let updatePage = async (req, res) => {
@@ -81,7 +81,7 @@ let updatePage = async (req, res) => {
 
 let update = (req, res) => {
   new UserModel().update(req.body, `id = ${req.params.id}`)
-  return res.redirect('/employees')
+  return res.redirect('/admin/employees')
 }
 
 let employee = async (req, res) => {
@@ -97,7 +97,18 @@ let reportPage = async (req, res) => {
 let report = async (req, res) => {
   let users = await new UserModel().get({ where: `id = ${req.params.id}` })
   let attendance = await new AttendanceModel().get({ where: `user_id = ${req.params.id} AND day LIKE '%${req.params.year}-${req.params.month}%'` })
-  res.render('admin/employee-report', { attendance, user: users[0] })
+  res.render('admin/employee-report', { attendance, year: req.params.year, month: req.params.month, user: users[0] })
+}
+
+let reportUpdatePage = async (req, res) => {
+  const { id, year, month, day } = req.params;
+  const reports = await new AttendanceModel().get({ where: `user_id = ${id} AND day = '${year}-${month}-${day}'` });
+  res.render('admin/report-update-page', { report: reports[0], user: { id }, year, month, day })
+}
+
+let reportUpdate = async (req, res) => {
+  new AttendanceModel().update(req.body, `user_id = ${req.params.id} AND day = '${req.params.year}-${req.params.month}-${req.params.day}'`)
+  res.redirect(`/admin/employee/report/${req.params.id}/${req.params.year}/${req.params.month}`);
 }
 
 module.exports = {
@@ -111,5 +122,7 @@ module.exports = {
   loan,
   updatePage,
   update,
-  reportPage
+  reportPage,
+  reportUpdatePage,
+  reportUpdate
 }
