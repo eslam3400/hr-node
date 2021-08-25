@@ -45,7 +45,7 @@ let addEmployee = async (req, res) => {
     if (img) { req.body.img = img } else { req.body.img = 'defualt.jpg' }
   }
   new UserModel().add(req.body)
-  return res.redirect('/admin/employees')
+  return res.redirect('/admin')
 }
 
 let employees = async (req, res) => {

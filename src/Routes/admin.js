@@ -9,10 +9,12 @@ router.get('/employee/loan/:id', Controller.Employee.loanPage) //done
 router.post('/employee/loan/:id', Controller.Employee.loan) //done
 router.get('/employee/update/:id', Controller.Employee.updatePage) //done
 router.post('/employee/update/:id', Controller.Employee.update) //done
-router.get('/employee/report/:id/:year/:month', Controller.Employee.report) //done
+router.get('/employee/report/:id/:year/:month', Controller.Reports.report) //done
+router.get('/employee/report/:id/:year/:month/print', Controller.Reports.printReport) //done
 router.get('/employee/report/:id/edit/:year/:month/:day', Controller.Employee.reportUpdatePage) //done
 router.post('/employee/report/:id/edit/:year/:month/:day', Controller.Employee.reportUpdate) //done
 router.get('/reports', Controller.Reports.reportsPage)
+router.get('/reports/:year/:month', Controller.Reports.printAllReports)
 router.get('/report/:id', Controller.Employee.reportPage)
 router.get('/job/add', Controller.Dashboard.addJobPage)
 router.post('/job/add', Controller.Dashboard.addJob)

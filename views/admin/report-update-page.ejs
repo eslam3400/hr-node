@@ -12,6 +12,19 @@
           <form action="/admin/employee/report/<%= user.id %>/edit/<%= year %>/<%= month %>/<%= day %>" method="post"
             enctype="multipart/form-data">
             <div class="form-group">
+              <label>Start</label>
+              <input type="time" class="form-control" name="start" placeholder="Start" value="<%= report.start %>" />
+            </div>
+            <div class="form-group">
+              <label>End</label>
+              <input type="time" class="form-control" name="finsih" placeholder="End" value="<%= report.finsih %>" />
+            </div>
+            <div class="form-group">
+              <label>Worked Time</label>
+              <input type="text" class="form-control" name="worked_time" placeholder="Worked Time"
+                value="<%= report.worked_time %>" />
+            </div>
+            <div class="form-group">
               <label>Bounce</label>
               <input type="number" class="form-control" name="bounes" placeholder="Bounce"
                 value="<%= report.bounes %>" />

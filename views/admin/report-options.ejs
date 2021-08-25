@@ -7,23 +7,11 @@
           <div class="clearfix">
             <div class="pull-left">
               <h4 class="text-blue h4">
-                Select Reports Options
+                Select Reports Date
               </h4>
-              <p class="mb-30">Complete this form to get reports data</p>
             </div>
           </div>
-          <form method="post" action="/admin/reports">
-            <div class="form-group col-6">
-              <label>Year</label>
-              <select name="pranch" id="">
-                <option value="all" selected>All</option>
-                <% pranchs.forEach(pranch=> { %>
-                  <option value="<%= pranch.id %>">
-                    <%= pranch.name %>
-                  </option>
-                  <% }) %>
-              </select>
-            </div>
+          <div>
             <div class="form-group col-6">
               <label>Year</label>
               <input type="number" class="form-control" id="year" name="year" placeholder="Year..." />
@@ -33,10 +21,16 @@
               <input type="number" class="form-control" id="month" name="month" placeholder="Month..." />
             </div>
             <button id="get" class="btn btn-primary">Get</button>
-          </form>
+          </div>
         </div>
         <!-- horizontal Basic Forms End -->
       </div>
       <%- include('includes/end') %>
+        <script>
+          $("#get").click(() => {
+            const myLocation = `/admin/reports/${$("#year").val()}/${$("#month").val()}`
+            location.href = myLocation;
+          });
+        </script>
     </div>
   </div>

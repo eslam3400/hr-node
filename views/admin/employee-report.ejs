@@ -4,9 +4,11 @@
 			<div class="min-height-200px">
 				<!-- Export Datatable start -->
 				<div class="card-box mb-30">
-					<div class="pd-20">
+					<div class="pd-20 w-100 d-flex justify-content-between">
 						<h4 class="text-blue h4">Report For <%= user.firstName + ' ' + user.lastName %>
 						</h4>
+						<a class="btn btn-primary" href="/admin/employee/report/<%= user.id %>/<%= year %>/<%= month %>/print"
+							role="button">Print</a>
 					</div>
 					<div class="pb-20">
 						<table id="employees-table" class="table hover multiple-select-row data-table-export nowrap">
@@ -52,7 +54,7 @@
 														role="button" data-toggle="dropdown" aria-expanded="false">
 														<i class="dw dw-more"></i>
 													</a>
-													<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list" style="">
+													<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 														<a class="dropdown-item"
 															href="/admin/employee/report/<%= user.id %>/edit/<%= year %>/<%= month %>/<%= record.day.getDate() %>"><i
 																class="dw dw-eye"></i> Edit</a>
