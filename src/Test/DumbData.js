@@ -1,12 +1,16 @@
-const AttendanceModel = require('../Model/AttendanceModel')
+const fs = require('fs');
+const csvToObj = require('csv-to-js-parser').csvToObj;
 
-for (let i = 0; i < 31; i++) {
-  let x;
-  if (i < 10) x = `0${i}`;
-  else x = i;
-  new AttendanceModel().add({
-    user_id: 8438436,
-    day: `2021-05-${x}`,
-    worked_time: 8
-  })
-}
+const data = fs.readFileSync('./123.csv').toString();
+
+const description =
+{
+  customer_id: { type: 'number', group: 1 },
+  product: { type: 'string' },
+  product_id: { type: 'number' },
+  customer_name: { type: 'string', group: 2 },
+  price: { type: 'number' },
+  closed: { type: 'boolean' },
+  customer_status: { type: 'number', group: 2 }
+};
+let obj = csvToObj(data, ';', description);

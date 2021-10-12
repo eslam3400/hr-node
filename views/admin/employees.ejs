@@ -110,7 +110,11 @@
 			let tr = table.getElementsByTagName("tr");
 			if ($('#pranch-employees').val() == "all")
 				for (let i = 0; i < tr.length; i++) tr[i].style.display = "";
-			else
+			else {
+				for (let i = 0; i < tr.length; i++) {
+					let td = tr[i].getElementsByTagName("td")[2];
+					tr[i].style.display = "";
+				}
 				for (let i = 0; i < tr.length; i++) {
 					let td = tr[i].getElementsByTagName("td")[2];
 					if (td) {
@@ -121,6 +125,7 @@
 						}
 					}
 				}
+			}
 		})
 	</script>
 

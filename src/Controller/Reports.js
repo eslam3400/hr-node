@@ -1,7 +1,12 @@
 const AttendanceModel = require('../Model/AttendanceModel')
+const ImportedReportModel = require('../Model/ImportedReportModel')
 const PranchModel = require('../Model/PranchModel')
 const UserModel = require('../Model/UserModel')
 const LoanModel = require('../Model/LoanModel')
+const Utility = require('../Utilities/Utility')
+const { uploadPath } = require('../../uploadPath')
+const fs = require('fs');
+const att = require('../../public/report.json')
 
 let reportsPage = async (req, res) => res.render('admin/report-options');
 
@@ -51,8 +56,38 @@ let printAllReports = async (req, res) => {
     cash = Math.floor((users[i].hourPrice * totalWorkedTime) + totalBonus - totalDeduct - totalLoans);
     reports.push({ attendance, user: users[i], totalWorkedTime, totalBonus, totalLoans, totalDeduct, cash })
   }
-  console.log(reports)
   res.render('admin/print-all-reports', { reports })
 }
 
-module.exports = { reportsPage, report, printReport, printAllReports }
+const importReportPage = (req, res) => res.render('admin/import-report')
+
+const importReport = async (req, res) => {
+  const test = await Utility.uploadFiles(req.files, 'report')
+  var arr = [];
+  fs.readFile(uploadPath + 'report.csv', function (err, data) {
+    if (err) return console.log(err);
+    data = data.toString();
+    arr = data.split('\n');
+    var jsonObj = [];
+    arr[0] = arr[0].replace(/['"]+/g, '')
+    var headers = arr[0].split(',');
+    for (var i = 1; i < arr.length; i++) {
+      arr[i] = arr[i].replace(/['"]+/g, '')
+      var data = arr[i].split(',');
+      var obj = {};
+      for (var j = 0; j < data.length; j++) {
+        obj[headers[j].trim()] = data[j].trim();
+      }
+      delete obj['1']
+      delete obj['name']
+      delete obj['']
+      delete obj['FP']
+      jsonObj.push(obj);
+    }
+    console.log(jsonObj);
+    fs.writeFileSync(uploadPath + 'report.json', JSON.stringify(jsonObj));
+    res.redirect('/admin')
+  });
+}
+
+module.exports = { reportsPage, report, printReport, printAllReports, importReport, importReportPage }

@@ -3,7 +3,7 @@ const adminRouter = require('./admin');
 const employeeRouter = require('./employee');
 const Controller = require('../Controller/Controller');
 
-router.get('/', (req, res) => res.send("home page"));
+router.get('/', (req, res) => res.redirect("/login"));
 /**
  * Auth
  */

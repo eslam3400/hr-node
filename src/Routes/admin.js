@@ -14,6 +14,8 @@ router.get('/employee/report/:id/:year/:month/print', Controller.Reports.printRe
 router.get('/employee/report/:id/edit/:year/:month/:day', Controller.Employee.reportUpdatePage) //done
 router.post('/employee/report/:id/edit/:year/:month/:day', Controller.Employee.reportUpdate) //done
 router.get('/reports', Controller.Reports.reportsPage)
+router.get('/importReports', Controller.Reports.importReportPage)
+router.post('/importReports', Controller.Reports.importReport)
 router.get('/reports/:year/:month', Controller.Reports.printAllReports)
 router.get('/report/:id', Controller.Employee.reportPage)
 router.get('/job/add', Controller.Dashboard.addJobPage)

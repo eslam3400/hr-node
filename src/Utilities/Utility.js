@@ -1,36 +1,23 @@
 const { uploadPath } = require('../../uploadPath')
 const uuid = require('uuid').v4
 
-let uploadFile = async file => {
-  if (file) {
-    let fileExtention = file.mimetype
-    fileExtention = fileExtention.slice(fileExtention.indexOf("/") + 1)
-    file.name = uuid() + '.' + fileExtention
+let uploadFiles = async (filesObj, formName) => {
+  if (filesObj) {
     return new Promise((resolve, reject) => {
+      let file = filesObj[formName]
+      console.log(file)
+      let fileExtention = file.mimetype
+      fileExtention = fileExtention.slice(fileExtention.indexOf("/") + 1)
+      file.name = 'report.csv'
       file.mv(uploadPath + file.name, err => {
-        if (err) resolve(null)
+        if (err) console.log(err)
         else resolve(file.name)
       })
     })
-  } else return null
-}
-
-let uploadFiles = async files => {
-  if (files)
-    return new Promise((resolve, reject) => {
-      files.forEach(file => {
-        let fileExtention = file.mimetype
-        fileExtention = fileExtention.slice(fileExtention.indexOf("/") + 1)
-        file.name = uuid() + '.' + fileExtention
-        file.mv(uploadPath + file.name + file.name, err => {
-          if (err) console.log(err)
-          else console.log('done')
-        })
-      });
-    })
+  }
   else return null
 }
 
 let generateID = () => uuid()
 
-module.exports = { uploadFile, uploadFiles, generateID }
+module.exports = { uploadFiles, generateID }

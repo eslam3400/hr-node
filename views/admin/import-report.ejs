@@ -1,0 +1,27 @@
+<%- include('includes/start') %>
+  <div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+      <div class="min-height-200px">
+        <!-- horizontal Basic Forms Start -->
+        <div class="pd-20 card-box mb-30">
+          <div class="clearfix">
+            <div class="pull-left">
+              <h4 class="text-blue h4">
+                Import Finger Print Report
+              </h4>
+            </div>
+          </div>
+          <form action="/admin/importReports" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label>Custom file input</label>
+              <div class="custom-file">
+                <input type="file" name="report" class="custom-file-input" />
+                <label class="custom-file-label">Choose file</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Import</button>
+          </form>
+        </div>
+        <!-- horizontal Basic Forms End -->
+      </div>
+      <%- include('includes/end') %>

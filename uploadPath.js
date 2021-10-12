@@ -1,2 +1,2 @@
-let uploadPath = __dirname + `/public/EmployeeData/`
+let uploadPath = __dirname + `/public/`
 module.exports = { uploadPath }
